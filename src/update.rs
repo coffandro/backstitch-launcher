@@ -2,7 +2,7 @@ use reqwest::Client;
 use serde::Deserialize;
 use std::error::Error;
 use std::fs::File;
-use std::io::{Write, copy};
+use std::io::{IsTerminal, Write, copy};
 #[cfg(not(target_os = "windows"))]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
@@ -81,6 +81,11 @@ fn unzip_file(zip_path: &Path, dest: &Path) -> Result<(), Box<dyn Error>> {
 }
 
 fn prompt_yes_no(prompt: &str) -> bool {
+    // HACK: if we're not in a terminal, just return true
+    if !std::io::stdout().is_terminal() {
+        return true;
+    }
+
     loop {
         print!("{} (y/n): ", prompt);
         io::stdout().flush().unwrap();

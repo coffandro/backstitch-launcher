@@ -51,7 +51,7 @@ async fn download_and_launch() -> Result<(), Box<dyn Error>> {
 }
 
 
-fn relaunch_in_terminal() -> Result<(), ()> {
+fn relaunch_in_terminal_linux() -> Result<(), ()> {
     let exe = env::current_exe().expect("Failed to get current executable");
 
     // Try common terminal emulators
@@ -88,7 +88,7 @@ async fn main() -> ExitCode {
     if cfg!(target_os = "linux") && !std::io::stdout().is_terminal() {
         // do we actually want to give up here, or try launching in the background?
         // giving up for now
-        match relaunch_in_terminal() {
+        match relaunch_in_terminal_linux() {
             Ok(_) => return ExitCode::SUCCESS,
             Err(_) => return ExitCode::FAILURE,
         }
