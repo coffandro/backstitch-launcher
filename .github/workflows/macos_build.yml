@@ -53,6 +53,8 @@ jobs:
           cp -R "$BUNDLE_APP" artifacts/backstitch-launcher-macos.app
 
       - name: Mac Sign
+        # Only run this if it's not a PR or the PR is from the main repository
+        if: github.event_name != 'pull_request' || github.repository == 'inkandswitch/backstitch-launcher'
         uses: ./.github/actions/macos-sign
         with:
           FRAMEWORK_PATH: ${{ github.workspace }}/artifacts/backstitch-launcher-macos.app

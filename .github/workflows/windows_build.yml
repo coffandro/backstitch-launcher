@@ -23,6 +23,8 @@ jobs:
         run: cargo build --release
 
       - name: Windows Sign
+        # Only run this if it's not a PR or the PR is from the main repository
+        if: github.event_name != 'pull_request' || github.repository == 'inkandswitch/backstitch-launcher'
         uses: ./.github/actions/windows-sign
         with:
           BINARY_PATHS: |
